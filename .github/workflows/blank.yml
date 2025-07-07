@@ -18,7 +18,9 @@ jobs:
       - name: Fetch all branches and create local tracking
         run: |
           for branch in $(git ls-remote --heads origin | awk '{print $2}' | sed 's|refs/heads/||'); do
-            git fetch origin $branch:$branch
+            if [ "$branch" != "${GITHUB_REF_NAME}" ]; then
+              git fetch origin $branch:$branch
+            fi
           done
 
       - name: Push to GitLab
